@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import API from "../api/axios";
+import ReactMarkdown from "react-markdown";
 import { CalendarDays, Clock, Share2 } from "lucide-react";
 
 export default function BlogDetail() {
@@ -9,11 +10,14 @@ export default function BlogDetail() {
 
   useEffect(() => {
     API.get(`/read-blog?title=${encodeURIComponent(title)}`)
-      .then((res) => setBlog(res.data))
+     .then((res) => setBlog(res.data))
       .catch((err) => console.error(err));
   }, [title]);
 
   if (!blog) return <div className="text-center mt-20">Loading...</div>;
+  <ReactMarkdown className="prose prose-md max-w-none text-gray-800">
+    {blog.body}
+  </ReactMarkdown>
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-16"> 
@@ -59,7 +63,7 @@ export default function BlogDetail() {
 
       <hr className="mb-8 border-t border-gray-200" /> 
 
-      <div className="prose prose-md max-w-none text-gray-800 leading-relaxed"> 
+      <div className="prose prose-md max-w-none text-gray-800 leading-relaxed whitespace-pre-line"> 
         {blog.body}
       </div>
     </main>

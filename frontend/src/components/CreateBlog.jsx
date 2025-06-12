@@ -71,8 +71,8 @@ const CreateBlog = () => {
         />
         <textarea
           name="body"
-          placeholder="Write your blog content here..."
-          className="w-full min-h-[60vh] text-lg border-none outline-none placeholder-gray-400 bg-gradient-to-br from-blue-50 to-purple-50 resize-none"
+          placeholder="Write your blog here..."
+          className="w-full min-h-[75vh] text-lg border-none outline-none placeholder-gray-400 bg-gradient-to-br from-blue-50 to-purple-50 resize-none"
           onChange={handleChange}
           required
         />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../api/axios";
 import { CalendarDays, User } from "lucide-react";
 
 export default function Home() {
@@ -11,7 +12,7 @@ export default function Home() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    axios.get("http://localhost:8000/read-blogs")
+    API.get("/read-blogs")
       .then((res) => setBlogs(res.data))
       .catch((err) => console.error("Failed to fetch blogs", err));
   }, []);
@@ -80,7 +81,7 @@ export default function Home() {
           Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">BlogSpace</span>
         </h2>
         <p className="mt-4 text-gray-600 max-w-xl mx-auto text-lg">
-          Discover amazing stories, share your thoughts, and connect with a community of passionate writers and readers.
+          Discover amazing stories and share your thoughts.
         </p>
 
         <div className="mt-8 flex justify-center gap-4">
@@ -99,7 +100,7 @@ export default function Home() {
           Latest Blog Posts
         </h3>
         <p className="text-gray-600 mt-2 max-w-lg mx-auto">
-          Explore our collection of insightful articles, tutorials, and stories from our community of writers.
+          Explore our collection of insightful articles, tutorials, and stories.
         </p>
 
         {/* Blog List */}
