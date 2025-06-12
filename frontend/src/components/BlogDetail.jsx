@@ -17,7 +17,7 @@ console.log(title, 'api')
   if (!blog) return <div className="text-center mt-20">Loading...</div>;
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12">
+    <main className="max-w-4xl mx-auto px-4 py-12 ">
       <Link to="/" className="text-blue-600 hover:underline text-sm mb-4 inline-block">
         ←
       </Link>
@@ -50,10 +50,10 @@ console.log(title, 'api')
         </div> */}
       </div>
 
-      <button className="flex items-center gap-2 border px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-100 mb-6">
+      {/* <button className="flex items-center gap-2 border px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-100 mb-6">
         <Share2 size={16} />
         Share Article
-      </button>
+      </button> */}
 
       <hr className="mb-6" />
 

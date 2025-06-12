@@ -7,6 +7,8 @@ export default function Home() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  const [username, setUsername] = useState(null);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios.get("http://localhost:8000/read-blogs")
@@ -18,6 +20,17 @@ export default function Home() {
     const stored = localStorage.getItem("user");
     if (stored) setUser(JSON.parse(stored));
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUsername(payload.sub);
+      } catch {
+        setUsername(null);
+      }
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -31,22 +44,33 @@ export default function Home() {
       <header className="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
         <h1 className="text-xl font-bold">BlogSpace</h1>
         <div className="space-x-4">
-          {user ? (
-            <>
-              <span className="text-sm">Hi, {user.username}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-1.5 rounded-md text-sm hover:bg-red-600"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="text-sm hover:underline">Login</Link>
-              <Link to="/register" className="bg-black text-white px-4 py-1.5 rounded-md text-sm hover:bg-gray-800">Sign Up</Link>
-            </>
-          )}
+          {username ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-700 text-md hover:underline hover:decoration-blue-300 ">Hi {username}!</span>
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload(); // refresh to update UI
+              }}
+              className="bg-black text-white px-4 py-1.5 rounded-md text-sm hover:bg-gray-800"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="space-x-4">
+            <Link to="/login" className="text-sm text-gray-700 hover:underline">
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="bg-black text-white px-4 py-1.5 rounded-md text-sm hover:bg-gray-800"
+            >
+              Sign Up
+            </Link>
+          </div>
+        )}
+
         </div>
       </header>
 
@@ -60,10 +84,10 @@ export default function Home() {
         </p>
 
         <div className="mt-8 flex justify-center gap-4">
-          <Link to="/create" className="flex items-center gap-2 bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-gray-900">
+          <Link to="/create" className="flex items-center gap-2 bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-gray-700">
             📝 Start Writing
           </Link>
-          <Link to="/explore" className="flex items-center gap-2 border px-6 py-2 rounded-md text-gray-800 font-medium hover:bg-gray-100">
+          <Link to="/explore" className="flex items-center gap-2 border px-6 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-200">
             🔍 Explore Blogs
           </Link>
         </div>
