@@ -8,6 +8,7 @@ from hashing import Hash
 from token_gen import create_access_token
 from oauth2 import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
 
 app = FastAPI()
 # Allow frontend to access backend
@@ -48,6 +49,8 @@ def login(current_user: Annotated[OAuth2PasswordRequestForm, Depends()], session
 @app.post("/create-blog", tags=["blogs"])
 def create_blog(blog: BlogDB, session: SessionDep) -> BlogDB:
     "Add blog data into DB"
+    if isinstance(blog.published_on, str):
+        blog.published_on = datetime.strptime(blog.published_on, "%Y-%m-%d").date()
     session.add(blog)
     session.commit()
     session.refresh(blog)
@@ -58,9 +61,14 @@ def read_all_blogs(session: SessionDep, limit: Annotated[int, Query(le=100)]=10)
     blogs = session.exec(select(BlogDB).limit(limit)).all()
     return blogs
 
-@app.get("/read-blog/{blog_id}", response_model=ShowBlog, tags=["blogs"])
-def read_blog(blog_id:int, session:SessionDep):
-    blog = session.get(BlogDB, blog_id)
+@app.get("/read-blog", response_model=ShowBlog, tags=["blogs"])
+def read_blog(session: SessionDep, 
+    title: str = Query(..., description="Title of the blog"),
+    ):
+
+    blog = session.exec(
+        select(BlogDB).where(BlogDB.title == title)
+    ).first()
     if not blog:
         raise HTTPException(status_code=404, detail='Blog not found')
     return blog
@@ -84,9 +92,9 @@ def create_user(new_user: UserDB, session:SessionDep):
     session.refresh(new_user)
     return new_user
 
-@app.get("/get-user/{user_id}", response_model=ShowUser, tags=["users"])
-def get_user(user_id: int, session: SessionDep, get_current_user: UserDB = Depends(get_current_user)):
-    user = session.get(UserDB, user_id)
+@app.get("/get-user/{username}", response_model=ShowUser, tags=["users"])
+def get_user(username: str, session: SessionDep, get_current_user: UserDB = Depends(get_current_user)):
+    user = session.get(UserDB, username)
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
     return user

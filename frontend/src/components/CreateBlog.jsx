@@ -3,8 +3,8 @@ import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
-  const [blogData, setBlogData] = useState({ id: "", title: "", body: "" });
-  const [userId, setUserId] = useState(null);
+  const [blogData, setBlogData] = useState({ title: "", body: "" });
+  const [username, setUsername] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -17,25 +17,19 @@ const CreateBlog = () => {
     }
   };
 
-  const fetchUserId = async () => {
-    const username = getUsernameFromToken();
-    try {
-      const res = await axios.get(`/get-user-by-username/${username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUserId(res.data.user_id);
-    } catch (err) {
-      console.error("Error fetching user:", err);
-    }
-  };
-
   useEffect(() => {
     if (!token) {
       navigate("/login");
     } else {
-      fetchUserId();
+      const extractedUsername = getUsernameFromToken();
+      if (!extractedUsername) {
+        alert("Invalid token. Please login again.");
+        navigate("/login");
+      } else {
+        setUsername(extractedUsername);
+      }
     }
-  }, []);
+  }, [token, navigate]);
 
   const handleChange = (e) => {
     setBlogData({ ...blogData, [e.target.name]: e.target.value });
@@ -43,14 +37,17 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userId) {
-      alert("User ID not loaded.");
+
+    if (!username) {
+      alert("Username not found. Please log in.");
       return;
     }
+
+    const today = new Date().toISOString().split("T")[0];
     try {
       await axios.post(
         "/create-blog",
-        { ...blogData, user_id: userId },
+        { ...blogData, username, published_on: today, },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Blog created!");
@@ -62,12 +59,33 @@ const CreateBlog = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="id" placeholder="Blog ID" onChange={handleChange} required />
-      <input name="title" placeholder="Title" onChange={handleChange} required />
-      <textarea name="body" placeholder="Body" onChange={handleChange} required />
-      <button type="submit">Create Blog</button>
-    </form>
+  
+    <div className="min-h-screen bg-white px-6 py-8 bg-gradient-to-br from-blue-50 to-purple-50">
+      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+        <input
+          name="title"
+          placeholder="Title"
+          className="w-full text-4xl font-bold border-none outline-none mb-6 placeholder-gray-500 bg-gradient-to-br from-blue-50 to-purple-50"
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="body"
+          placeholder="Write your blog content here..."
+          className="w-full min-h-[60vh] text-lg border-none outline-none placeholder-gray-400 bg-gradient-to-br from-blue-50 to-purple-50 resize-none"
+          onChange={handleChange}
+          required
+        />
+        <div className="mt-4 flex justify-end">
+          <button
+            type="submit"
+            className="bg-purple-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition"
+          >
+            Publish
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

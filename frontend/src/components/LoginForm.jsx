@@ -24,10 +24,31 @@ export default function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={login}>
-      <input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Login</button>
-    </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <form
+        onSubmit={login}
+        className="w-full max-w-md bg-white shadow-md rounded-2xl p-8 space-y-6"
+      >
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 "Page with Pydantic models"
 from pydantic import BaseModel, EmailStr
 from typing import List
+from datetime import date, datetime, time, timedelta
 
 
 class Login(BaseModel):
@@ -18,11 +19,12 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: str
     name: str
-    user_id: int
 
 class BlogList(BaseModel):
     title: str
     body: str
+    published_on: date
+    published_by: User
 
 class ShowUser(BaseModel):
     name: str
@@ -31,7 +33,7 @@ class ShowUser(BaseModel):
     blogs: List[BlogList]
 
 class ShowBlog(BaseModel):
-    id: int
     title: str
     body: str
+    published_on: date
     published_by: User

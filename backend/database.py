@@ -3,12 +3,12 @@ from fastapi import Depends
 from sqlmodel import create_engine, Session, SQLModel, Field, Relationship
 from typing import Annotated
 from pydantic import EmailStr
-
+from datetime import date, datetime, time, timedelta
 
 class UserDB(SQLModel, table=True):
     "User DB table, this creates a table with table name same as class name"
-    user_id: Annotated[int, Field(primary_key=True, default=None)]
-    username: str
+    # user_id: Annotated[int, Field(primary_key=True, default=None)]
+    username: Annotated[str, Field(primary_key=True, default=None)]
     name: str
     email: EmailStr
     password: str
@@ -16,10 +16,11 @@ class UserDB(SQLModel, table=True):
 
 class BlogDB(SQLModel, table=True):
     "DB model, this creates a table with table name same as class name ie. blogdb"
-    id: Annotated[int, Field(primary_key=True, default=None)]
-    title: str
+    # id: Annotated[int, Field(primary_key=True, default=None)]
+    title: Annotated[str, Field(primary_key=True, default=None)]
     body: str
-    user_id: int | None = Field(default=None, foreign_key="userdb.user_id")
+    published_on: date
+    username: str | None = Field(default=None, foreign_key="userdb.username")
     published_by: UserDB | None = Relationship(back_populates="blogs")
 
 "A SQLModel engine (underneath it's actually a SQLAlchemy engine) is what holds the connections to the database."
