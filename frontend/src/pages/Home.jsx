@@ -59,7 +59,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="space-x-4">
-            <Link to="/login" className="text-sm text-gray-700 hover:underline">
+            <Link to="/login" className="bg-gray-100 text-black px-4 py-2 rounded-md text-sm hover:bg-gray-300">
               Login
             </Link>
             <Link

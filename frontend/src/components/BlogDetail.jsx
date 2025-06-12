@@ -4,39 +4,40 @@ import API from "../api/axios";
 import { CalendarDays, Clock, Share2 } from "lucide-react";
 
 export default function BlogDetail() {
-  const { title } = useParams(); // URL should be like /read-blog/:title
+  const { title } = useParams();
   const [blog, setBlog] = useState(null);
 
   useEffect(() => {
     API.get(`/read-blog?title=${encodeURIComponent(title)}`)
-    
       .then((res) => setBlog(res.data))
       .catch((err) => console.error(err));
   }, [title]);
-console.log(title, 'api')
+
   if (!blog) return <div className="text-center mt-20">Loading...</div>;
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12 ">
-      <Link to="/" className="text-blue-600 hover:underline text-sm mb-4 inline-block">
-        ←
+    <main className="max-w-4xl mx-auto px-6 py-16"> 
+      <Link to="/" className="text-blue-600 hover:underline text-sm mb-6 inline-block"> 
+        ← Back to Home
       </Link>
 
-      <h1 className="text-4xl font-bold mb-4 text-gray-900">{blog.title}</h1>
+      <h1 className="text-4xl font-extrabold mb-6 text-gray-900 leading-tight">
+        {blog.title}
+      </h1>
 
-      <div className="flex items-center gap-6 mb-6 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
+      <div className="flex items-center gap-8 mb-8 text-base text-gray-600"> 
+        <div className="flex items-center gap-3"> 
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 text-white flex items-center justify-center font-semibold text-md"> 
             {blog.published_by?.name?.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div className="font-medium">{blog.published_by?.name}</div>
-            <div className="text-xs text-gray-400">Author</div>
+            <div className="font-medium text-sm">{blog.published_by?.name}</div> 
+            <div className="text-sm text-gray-400">Author</div> 
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
-          <CalendarDays size={16} />
+        <div className="flex items-center gap-1"> 
+          <CalendarDays size={18} /> 
           <span>Published {new Date(blog.published_on).toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",
@@ -44,20 +45,21 @@ console.log(title, 'api')
           })}</span>
         </div>
 
-        {/* <div className="flex items-center gap-1">
-          <Clock size={16} />
+        {/* <div className="flex items-center gap-2">
+          <Clock size={18} />
           <span>5 min read</span>
-        </div> */}
+        </div>
       </div>
 
-      {/* <button className="flex items-center gap-2 border px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-100 mb-6">
-        <Share2 size={16} />
+      <button className="flex items-center gap-3 border px-4 py-2 rounded-lg text-base font-medium hover:bg-gray-100 mb-8">
+        <Share2 size={18} />
         Share Article
       </button> */}
+      </div> 
 
-      <hr className="mb-6" />
+      <hr className="mb-8 border-t border-gray-200" /> 
 
-      <div className="prose prose-lg max-w-none text-gray-800">
+      <div className="prose prose-md max-w-none text-gray-800 leading-relaxed"> 
         {blog.body}
       </div>
     </main>
