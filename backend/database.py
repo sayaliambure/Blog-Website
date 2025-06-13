@@ -4,6 +4,12 @@ from sqlmodel import create_engine, Session, SQLModel, Field, Relationship
 from typing import Annotated
 from pydantic import EmailStr
 from datetime import date, datetime, time, timedelta
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 
 class UserDB(SQLModel, table=True):
     "User DB table, this creates a table with table name same as class name"
@@ -24,11 +30,12 @@ class BlogDB(SQLModel, table=True):
     published_by: UserDB | None = Relationship(back_populates="blogs")
 
 "A SQLModel engine (underneath it's actually a SQLAlchemy engine) is what holds the connections to the database."
-sqlite_file_name = "blog.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-connect_args = {"check_same_thread": False}
+# sqlite_file_name = "blog.db"
+# sqlite_url = f"sqlite:///{sqlite_file_name}"
+# connect_args = {"check_same_thread": False}
+# engine = create_engine(sqlite_url, connect_args=connect_args) #for sqlite3 setup
 
-engine = create_engine(sqlite_url, connect_args=connect_args)
+engine = create_engine(DATABASE_URL) # for postgresql setup
 
 def create_db_and_tables():
     "create the tables for all the table models."
