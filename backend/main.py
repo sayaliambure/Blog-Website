@@ -14,7 +14,8 @@ app = FastAPI()
 # Allow frontend to access backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # or ["*"] for all
+    # allow_origins=["http://localhost:5173"],  # or ["*"] for all
+    allow_origins=["https://blogspace-web.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
