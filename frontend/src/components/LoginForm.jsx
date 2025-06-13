@@ -30,12 +30,12 @@ export default function LoginForm({ onLogin }) {
           ← Back to Home
         </Link>
         <h1 className="text-3xl font-bold mt-4">Welcome Back</h1>
-        <p className="text-gray-600">Login to your BlogSpace account</p>
+        {/* <p className="text-gray-600">Login to your BlogSpace account</p> */}
       </div>
 
       <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 space-y-6">
         <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-         Sign In
+         Login
         </h2>
 
         <form onSubmit={login} className="space-y-4">
@@ -69,7 +69,7 @@ export default function LoginForm({ onLogin }) {
             type="submit"
             className="w-full bg-black text-white py-2.5 rounded-md hover:bg-gray-900 transition"
           >
-            Sign In
+            Login
           </button>
         </form>
 
